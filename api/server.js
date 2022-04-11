@@ -26,9 +26,10 @@ server.get('/api/users/:id', (req, res) => {
 
 server.post('/api/users', (req, res) => {
     let user = req.body;
+
     User.insert(user)
         .then(user => {
-            if(!user) {
+            if(!user.name || !user.bio) {
                 res.status(400).json({ message: "Please provide name and bio for the user" });
             } else {
                 res.status(201).json(user);
@@ -42,7 +43,7 @@ server.put('/api/users/:id', (req, res) => {
 
     User.update(id, user)
         .then(updatedUser => {
-            if(!id) {
+            if(!updatedUser) {
                 res.status(404).json({ message: "The user with the specified ID does not exist" });
             } else if (!user.name || !user.bio) {
                 res.status(400).json({ message: "Please provide name and bio for the user" });
