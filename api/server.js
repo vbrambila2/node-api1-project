@@ -14,15 +14,26 @@ server.get('/api/users', (req, res) => {
 });
 
 server.get('/api/users/:id', (req, res) => {
-    console.log(req.params);
     User.findById(req.params.id)
         .then(user => {
             if(!user) {
-                res.status(404).json({ message: "The user with the specified ID does not exist" })
+                res.status(404).json({ message: "The user with the specified ID does not exist" });
             } else {
                 res.json(user)
             }
         })
-})
+});
+
+server.post('/api/users', (req, res) => {
+    let user = req.body;
+    User.insert(user)
+        .then(updatedUser => {
+            if(!updatedUser) {
+                res.status(400).json({ message: "Please provide name and bio for the user" });
+            } else {
+                res.json(updatedUser);
+            }
+        })
+});
 
 module.exports = server; // EXPORT YOUR SERVER instead of {}
